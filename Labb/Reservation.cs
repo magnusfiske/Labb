@@ -7,15 +7,15 @@ using System.ComponentModel;
 
 namespace Labb
 {
-    internal class Reservation : INotifyPropertyChanged, IReservation
+    public class Reservation : INotifyPropertyChanged, IReservation
     {
         private string? name;
         private int people;
-        private DateTime date;
+        private string date;
         private string? table;
         private string? time;
 
-        public Reservation(string name, int people, DateTime date, string time, string table)
+        public Reservation(string name, int people, string date, string time, string table)
         {
             Name = name;
             People = people;
@@ -42,7 +42,7 @@ namespace Labb
                 OnPropertyChanged("People");
             }
         }
-        public DateTime Date
+        public string Date
         {
             get { return date; }
             set

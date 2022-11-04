@@ -5,43 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Labb"
         mc:Ignorable="d"
-        Title="Ändra bokning" Height="296" Width="362" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+        Title="Ändra bokning" Height="250" Width="400" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
     <Grid>
         <WrapPanel x:Name="bookingPanel" Background="LightGray" Margin="10">
             <StackPanel Margin="10">
                 <Label x:Name="labelDate" Content="Datum"/>
-                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateChanged="EnableButton" SelectedDate="{Binding ElementName=lwBookingList,Path=SelectedItem.Date}"/>
+                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateChanged="datePicker_SelectedDateChanged">
+                   
+                    </DatePicker>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelName" Content="Namn"/>
-                <TextBox x:Name="tbName" MinWidth="150" Height="22" TextChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.Name}"/>
+                <TextBox x:Name="tbName" MinWidth="150" Height="22" Text="{Binding Path=SelectedItem.Name}"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelTime" Content="Tid"/>
-                <ComboBox x:Name="comboTime" MinWidth="150" SelectionChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.Time}">
-
+                <ComboBox x:Name="comboTime" MinWidth="150" Text="{Binding Path=SelectedItem.Time}">
+                    <ComboBoxItem Content="18:00"/>
+                    <ComboBoxItem Content="19:00"/>
+                    <ComboBoxItem Content="20:00"/>
+                    <ComboBoxItem Content="21:00"/>
+                    <ComboBoxItem Content="22:00"/>
+                    <ComboBoxItem Content="23:00"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelGuests" Content="Antal gäster"/>
-                <ComboBox x:Name="comboGuests" MinWidth="150" SelectionChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.People}">
-                    <ComboBoxItem x:Name="g9" Content="1"/>
-                    <ComboBoxItem x:Name="g10" Content="2"/>
-                    <ComboBoxItem x:Name="g11" Content="3"/>
-                    <ComboBoxItem x:Name="g12" Content="4"/>
-                    <ComboBoxItem x:Name="g13" Content="5"/>
-                    <ComboBoxItem x:Name="g14" Content="6"/>
-                    <ComboBoxItem x:Name="g15" Content="7"/>
-                    <ComboBoxItem x:Name="g16" Content="8"/>
+                <ComboBox x:Name="comboGuests" MinWidth="150" Text="{Binding Path=SelectedItem.People}">
+                    <ComboBoxItem Content="1"/>
+                    <ComboBoxItem Content="2"/>
+                    <ComboBoxItem Content="3"/>
+                    <ComboBoxItem Content="4"/>
+                    <ComboBoxItem Content="5"/>
+                    <ComboBoxItem Content="6"/>
+                    <ComboBoxItem Content="7"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelTable" Content="Bordsnummer"/>
-                <ComboBox x:Name="comboTable" MinWidth="150" SelectionChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.Table}">
-
+                <ComboBox x:Name="comboTable" MinWidth="150" Text="{Binding Path=SelectedItem.Table}">
+                    <ComboBoxItem Content="bord 1"/>
+                    <ComboBoxItem Content="bord 2"/>
+                    <ComboBoxItem Content="bord 3"/>
+                    <ComboBoxItem Content="bord 4"/>
+                    <ComboBoxItem Content="bord 5"/>
+                    <ComboBoxItem Content="bord 6"/>
+                    <ComboBoxItem Content="bord 7"/>
+                    <ComboBoxItem Content="bord 8"/>
                 </ComboBox>
             </StackPanel>
-            <Button x:Name="btnOk" Content="OK" Click="btnOk_Click" Height="20" Width="100" Margin="10"/>
+            <Button x:Name="btnOk" Content="OK" Click="btnOk_Click" Height="20" Width="100" Margin="35"/>
         </WrapPanel>
         
     </Grid>

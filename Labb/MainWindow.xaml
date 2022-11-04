@@ -25,21 +25,21 @@
         <WrapPanel x:Name="bookingPanel" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3" Background="LightGray" Margin="10">
             <StackPanel Margin="10">
                 <Label x:Name="labelDate" Content="Datum"/>
-                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateChanged="EnableButton" SelectedDate="{Binding ElementName=lwBookingList,Path=SelectedItem.Date}"/>
+                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateFormat="Short" SelectedDateChanged="EnableBookButton"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelName" Content="Namn"/>
-                <TextBox x:Name="tbName" MinWidth="150" Height="22" TextChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.Name}"/>
+                <TextBox x:Name="tbName" MinWidth="150" Height="22" TextChanged="EnableBookButton"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelTime" Content="Tid"/>
-                <ComboBox x:Name="comboTime" MinWidth="150" SelectionChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.Time}">
+                <ComboBox x:Name="comboTime" MinWidth="150" SelectionChanged="EnableBookButton">
 
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelGuests" Content="Antal gäster"/>
-                <ComboBox x:Name="comboGuests" MinWidth="150" SelectionChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.People}">
+                <ComboBox x:Name="comboGuests" MinWidth="150" SelectionChanged="EnableBookButton">
                     <ComboBoxItem x:Name="g9" Content="1"/>
                     <ComboBoxItem x:Name="g10" Content="2"/>
                     <ComboBoxItem x:Name="g11" Content="3"/>
@@ -52,14 +52,15 @@
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelTable" Content="Bordsnummer"/>
-                <ComboBox x:Name="comboTable" MinWidth="150" SelectionChanged="EnableButton" Text="{Binding ElementName=lwBookingList,Path=SelectedItem.Table}">
+                <ComboBox x:Name="comboTable" MinWidth="150" SelectionChanged="EnableBookButton">
 
                 </ComboBox>
             </StackPanel>
             <Button x:Name="btnBook" Content="Boka" IsEnabled="False" Click="btnBook_Click" Margin="10" MinWidth="150" Height="30" VerticalAlignment="Bottom"/>
         </WrapPanel>
-        <Button x:Name="btnCancel" Content="Avboka" Click="btnCancel_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Top"/>
-        <Button x:Name="btnEdit" Content="Redigera" Click="btnEdit_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Top"/>
+        <Button x:Name="btnCancel" Content="Avboka" Click="btnCancel_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False"/>
+        <Button x:Name="btnEdit" Content="Redigera" Click="btnEdit_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False"/>
+        <Button x:Name="btnLoad" Content="Öppna" Click="btnLoad_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Bottom"/>
         <ListView x:Name="lwBookingList" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" Margin="10" FontSize="10" GotFocus="lwBookingList_GotFocus">
             <ListView.View>
                 <GridView>

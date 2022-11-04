@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,14 +21,37 @@ namespace Labb
     /// </summary>
     public partial class EditDialog : Window
     {
-        public EditDialog()
+        private ListView bookingList;
+
+        public EditDialog(ListView bookingList)
         {
             InitializeComponent();
+
+            this.bookingList = bookingList;
+            bookingPanel.DataContext = this.bookingList;
         }
+
+        public int Index { get; set; }
+        public DateTime? Date { get; set; }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
 
+        private void datePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Index = bookingList.SelectedIndex;
+            Date = datePicker.SelectedDate;
+            OnDateChanged(e);
+        }
+
+        public event EventHandler DateChanged;
+
+        private void OnDateChanged(EventArgs e)
+        {
+            var dateChanged = this.DateChanged;
+            dateChanged?.Invoke(this, e);
         }
     }
 }

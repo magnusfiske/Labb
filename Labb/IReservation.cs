@@ -10,7 +10,7 @@ namespace Labb
     {
         string Name { get; set; }
         int People { get; set; }
-        DateTime Date { get; set; }
+        string Date { get; set; }
         string Time { get; set; }
         string Table { get; set; }
     }

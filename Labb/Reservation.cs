@@ -30,7 +30,7 @@ namespace Labb
             set
             {
                 name = value;
-                OnPropertyChanged("Name");
+                //OnPropertyChanged("Name");
             }
         }
         public int People
@@ -39,7 +39,7 @@ namespace Labb
             set
             {
                 people = value;
-                OnPropertyChanged("People");
+                //OnPropertyChanged("People");
             }
         }
         public string Date
@@ -48,7 +48,7 @@ namespace Labb
             set
             {
                 date = value;
-                OnPropertyChanged("Date");
+               // OnPropertyChanged("Date");
             }
         }
         public string Time
@@ -57,7 +57,7 @@ namespace Labb
             set
             {
                 time = value;
-                OnPropertyChanged("Time");
+                //OnPropertyChanged("Time");
             }
         }
         public string Table
@@ -66,7 +66,7 @@ namespace Labb
             set
             {
                 table = value;
-                OnPropertyChanged("Table");
+                //OnPropertyChanged("Table");
             }
         }
 

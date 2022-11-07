@@ -178,15 +178,34 @@ namespace Labb
             {
                 try
                 {
+                    Reservation tmpReservation = MyBookingSystem.Reservations.ElementAt(lvBookingList.SelectedIndex) as Reservation;
                     var dlg = new EditDialog(lvBookingList) { Owner = this };
+                    MyBookingSystem.Reservations.RemoveAt(lvBookingList.SelectedIndex);
                     dlg.DateChanged += dlg_DateChanged;
-                    dlg.ShowDialog();
+                    Nullable<bool> result = dlg.ShowDialog();
+                    if (result == true)
+                    {
+                        dlg.DateChanged -= dlg_DateChanged;
+                        string? newDate = dlg.NewDate.Value.ToString("ddd d MMM");
+                        myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, new Reservation(dlg.Name, dlg.Guests, newDate, dlg.Time, dlg.Table));
+                        dlg.datePickerEdit.SelectedDateChanged -= dlg.datePickerEdit_SelectedDateChanged;
+                        dlg.comboTableEdit.SelectionChanged -= dlg.comboTimeEdit_SelectionChanged;
+                        dlg.comboGuestsEdit.SelectionChanged -= dlg.comboGuestsEdit_SelectionChanged;
+                        
+                    }
+                    else
+                    {
+                        dlg.DateChanged -= dlg_DateChanged;
+                        myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, tmpReservation);
+                        
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
             }
+            RefreshContent();
         }
 
         private void lvBookingList_GotFocus(object sender, RoutedEventArgs e)
@@ -197,13 +216,13 @@ namespace Labb
         private void dlg_DateChanged(object sender, EventArgs e)
         {
             var dlg = (EditDialog)sender;
+            string? newDate = dlg.NewDate.Value.ToString("ddd d MMM");
 
-            string newDate = dlg.Date.Value.ToString("ddd d MMM");
+            Reservation editedReservation = new Reservation(dlg.Name, dlg.Guests, newDate, dlg.Time, dlg.Table);
 
-            myBookingSystem.Reservations.ElementAt(dlg.Index).Date = newDate;
-
-            if (myBookingSystem.IsDoubleBooking(myBookingSystem.Reservations.ElementAt(dlg.Index), dlg.Index))
-                MessageBox.Show($"{myBookingSystem.Reservations.ElementAt(dlg.Index).Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (myBookingSystem.IsDoubleBooking(editedReservation))
+                MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            
         }
 
         private async void btnLoad_Click(object sender, RoutedEventArgs e)

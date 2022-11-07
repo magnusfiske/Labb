@@ -20,7 +20,7 @@ namespace Labb
         }
 
         public List<IReservation> Reservations { get; set; }
-        private string FileName { get; set; }
+        private string? FileName { get; set; }
         
 
         public void BookTable(IReservation reservation)

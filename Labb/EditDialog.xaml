@@ -7,20 +7,20 @@
         mc:Ignorable="d"
         Title="Ändra bokning" Height="250" Width="400" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
     <Grid>
-        <WrapPanel x:Name="bookingPanel" Background="LightGray" Margin="10">
+        <WrapPanel x:Name="bookingPanelEdit" Background="LightGray" Margin="10">
             <StackPanel Margin="10">
                 <Label x:Name="labelDate" Content="Datum"/>
-                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateChanged="datePicker_SelectedDateChanged">
+                <DatePicker x:Name="datePickerEdit" MinWidth="150" Text="{Binding Path=SelectedItem.Date}" SelectedDateChanged="datePickerEdit_SelectedDateChanged">
                    
                     </DatePicker>
             </StackPanel>
             <StackPanel Margin="10">
-                <Label x:Name="labelName" Content="Namn"/>
-                <TextBox x:Name="tbName" MinWidth="150" Height="22" Text="{Binding Path=SelectedItem.Name}"/>
+                <Label x:Name="labelNameEdit" Content="Namn"/>
+                <TextBox x:Name="tbNameEdit" MinWidth="150" Height="22" Text="{Binding Path=SelectedItem.Name}" TextChanged="tbNameEdit_TextChanged"/>
             </StackPanel>
             <StackPanel Margin="10">
-                <Label x:Name="labelTime" Content="Tid"/>
-                <ComboBox x:Name="comboTime" MinWidth="150" Text="{Binding Path=SelectedItem.Time}">
+                <Label x:Name="labelTimeEdit" Content="Tid"/>
+                <ComboBox x:Name="comboTimeEdit" MinWidth="150" Text="{Binding Path=SelectedItem.Time}" SelectionChanged="comboTimeEdit_SelectionChanged">
                     <ComboBoxItem Content="18:00"/>
                     <ComboBoxItem Content="19:00"/>
                     <ComboBoxItem Content="20:00"/>
@@ -30,8 +30,8 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10">
-                <Label x:Name="labelGuests" Content="Antal gäster"/>
-                <ComboBox x:Name="comboGuests" MinWidth="150" Text="{Binding Path=SelectedItem.People}">
+                <Label x:Name="labelGuestsEdit" Content="Antal gäster"/>
+                <ComboBox x:Name="comboGuestsEdit" MinWidth="150" Text="{Binding Path=SelectedItem.People}" SelectionChanged="comboGuestsEdit_SelectionChanged">
                     <ComboBoxItem Content="1"/>
                     <ComboBoxItem Content="2"/>
                     <ComboBoxItem Content="3"/>
@@ -42,8 +42,8 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10">
-                <Label x:Name="labelTable" Content="Bordsnummer"/>
-                <ComboBox x:Name="comboTable" MinWidth="150" Text="{Binding Path=SelectedItem.Table}">
+                <Label x:Name="labelTableEdit" Content="Bordsnummer"/>
+                <ComboBox x:Name="comboTableEdit" MinWidth="150" Text="{Binding Path=SelectedItem.Table}" SelectionChanged="comboTableEdit_SelectionChanged">
                     <ComboBoxItem Content="bord 1"/>
                     <ComboBoxItem Content="bord 2"/>
                     <ComboBoxItem Content="bord 3"/>

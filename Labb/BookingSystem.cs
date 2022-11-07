@@ -26,9 +26,9 @@ namespace Labb
         public void BookTable(IReservation reservation)
         {
 
-            if (IsDoubleBooking(reservation))
-                MessageBox.Show($"{reservation.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
-            else
+            //if (IsDoubleBooking(reservation))
+            //    MessageBox.Show($"{reservation.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //else
                 Reservations.Add(reservation);
         }
 
@@ -42,9 +42,17 @@ namespace Labb
 
         }
 
-        private bool IsDoubleBooking(IReservation reservation)
+        public bool IsDoubleBooking(IReservation reservation)
         {
-            return Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList().Any(item => item.Table.Equals(reservation.Table));
+            return Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList().Any(item => item.Table.Equals(reservation.Table)); 
+        }
+        public bool IsDoubleBooking(IReservation reservation, int index)
+        {
+            Reservations.RemoveAt(index);
+            bool result = Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList().Any(item => item.Table.Equals(reservation.Table)); 
+            if (result == false)
+                Reservations.Insert(index, reservation);
+            return result;
         }
 
         public async Task LoadReservations()

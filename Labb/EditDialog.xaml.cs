@@ -29,10 +29,18 @@ namespace Labb
 
             this.bookingList = bookingList;
             bookingPanel.DataContext = this.bookingList;
+            SetInDate();
         }
 
         public int Index { get; set; }
         public DateTime? Date { get; set; }
+
+
+        private void SetInDate()
+        {
+            Reservation tmp = bookingList.SelectedItem as Reservation;
+            datePicker.SelectedDate = DateTime.Parse(tmp.Date);
+        }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {

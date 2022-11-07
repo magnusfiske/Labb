@@ -25,7 +25,7 @@
         <WrapPanel x:Name="bookingPanel" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3" Background="LightGray" Margin="10">
             <StackPanel Margin="10">
                 <Label x:Name="labelDate" Content="Datum"/>
-                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateFormat="Short" SelectedDateChanged="EnableBookButton"/>
+                <DatePicker x:Name="datePicker" MinWidth="150" SelectedDateFormat="Short" SelectedDateChanged="datePicker_SelectedDateChanged"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelName" Content="Namn"/>
@@ -33,7 +33,7 @@
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelTime" Content="Tid"/>
-                <ComboBox x:Name="comboTime" MinWidth="150" SelectionChanged="EnableBookButton">
+                <ComboBox x:Name="comboTime" MinWidth="150" SelectionChanged="comboTime_SelectionChanged">
 
                 </ComboBox>
             </StackPanel>
@@ -61,7 +61,8 @@
         <Button x:Name="btnCancel" Content="Avboka" Click="btnCancel_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False"/>
         <Button x:Name="btnEdit" Content="Redigera" Click="btnEdit_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False"/>
         <Button x:Name="btnLoad" Content="Öppna" Click="btnLoad_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Bottom"/>
-        <ListView x:Name="lwBookingList" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" Margin="10" FontSize="10" GotFocus="lwBookingList_GotFocus">
+        <Button x:Name="btnShowAll" Content="Visa alla" Click="btnShowAll_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Bottom"/>
+        <ListView x:Name="lvBookingList" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" Margin="10" FontSize="10" GotFocus="lvBookingList_GotFocus">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Datum" Width="100" DisplayMemberBinding="{Binding Path=Date}"/>

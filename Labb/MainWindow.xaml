@@ -65,11 +65,31 @@
         <ListView x:Name="lvBookingList" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" Margin="10" FontSize="10" GotFocus="lvBookingList_GotFocus">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Datum" Width="100" DisplayMemberBinding="{Binding Path=Date}"/>
-                    <GridViewColumn Header="Tid" Width="50" DisplayMemberBinding="{Binding Path=Time}"/>
-                    <GridViewColumn Header="Namn" Width="100" DisplayMemberBinding="{Binding Path=Name}"/>
-                    <GridViewColumn Header="Antal" Width="50" DisplayMemberBinding="{Binding Path=Guests}"/>
-                    <GridViewColumn Header="Bord" Width="75" DisplayMemberBinding="{Binding Path=Table}"/>
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Date}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Date" Click="lvBookingListColumnHeader_Click">Datum</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="50" DisplayMemberBinding="{Binding Path=Time}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Time" Click="lvBookingListColumnHeader_Click">Tid</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Name}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Name" Click="lvBookingListColumnHeader_Click">Namn</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="50" DisplayMemberBinding="{Binding Path=Guests}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Guests" Click="lvBookingListColumnHeader_Click">Antal</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="75" DisplayMemberBinding="{Binding Path=Table}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Table" Click="lvBookingListColumnHeader_Click">Bord</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

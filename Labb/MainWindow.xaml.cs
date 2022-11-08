@@ -34,6 +34,10 @@ namespace Labb
 
         private CollectionView view;
 
+        private GridViewColumnHeader listViewSortCol = null;
+
+        private SortAdorner listViewSortAdorner = null;
+
         public MainWindow()
         {
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
@@ -212,14 +216,20 @@ namespace Labb
 
         private void dlg_DateChanged(object sender, EventArgs e)
         {
-            var dlg = (EditDialog)sender;
-            string newDate = dlg.NewDate.Value.ToString("ddd d MMM");
+            try
+            {
+                var dlg = (EditDialog)sender;
+                string newDate = dlg.NewDate.Value.ToString("ddd d MMM");
 
-            Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
+                Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
 
-            if (myBookingSystem.IsDoubleBooking(editedReservation))
-                MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
-
+                if (myBookingSystem.IsDoubleBooking(editedReservation))
+                    MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Något gick fel!");
+            }
         }
 
         private async void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -266,6 +276,26 @@ namespace Labb
                 btnShowAll.Content = "Visa alla";
                 RefreshContent();
             }
+        }
+
+        private void lvBookingListColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = sender as GridViewColumnHeader;
+            string sortBy = column.Tag.ToString();
+            if(listViewSortCol != null)
+            {
+                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
+                lvBookingList.Items.SortDescriptions.Clear();
+            }
+
+            ListSortDirection newDir = ListSortDirection.Ascending;
+            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
+                newDir = ListSortDirection.Descending;
+
+            listViewSortCol = column;
+            listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
+            AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
+            lvBookingList.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
     }
 }

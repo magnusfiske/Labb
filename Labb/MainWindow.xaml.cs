@@ -71,15 +71,16 @@ namespace Labb
             string name = tbName.Text;
             string time = comboTime.Text;
             string table = comboTable.Text;
-            int people = 
-                Int32.Parse(comboGuests.Text); //Fixa till TryParse
+            string guests = comboGuests.Text;
 
             try
             {
-                Reservation reservation = new Reservation(name, people, date, time, table);
+                Reservation reservation = new Reservation(name, guests, date, time, table);
 
                 if (myBookingSystem.IsDoubleBooking(reservation))
                     MessageBox.Show($"{reservation.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else if (myBookingSystem.HasFive(reservation))
+                    MessageBox.Show($"Det finns redan 5 bord bokade kl {reservation.Time}. Prova med en annan tid eller be gästen komma obokad.", "För många bokningar", MessageBoxButton.OK, MessageBoxImage.Warning);
                 else
                 {
                     MyBookingSystem.BookTable(reservation);
@@ -101,12 +102,12 @@ namespace Labb
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             if (MyBookingSystem.Reservations == null || lvBookingList.SelectedIndex == -1)
-                MessageBox.Show("Markera en bokning för att ta bort den.","Fel!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Markera en bokning för att ta bort den.", "Fel!", MessageBoxButton.OK, MessageBoxImage.Warning);
             else
             {
                 try
                 {
-                    myBookingSystem.Reservations.RemoveAt(lvBookingList.SelectedIndex);
+                    myBookingSystem.CancelReservation(lvBookingList.SelectedIndex);
                     RefreshContent();
                 }
                 catch (Exception ex)
@@ -123,7 +124,6 @@ namespace Labb
 
             if (Filter == true)
             {
-                //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvBookingList.ItemsSource);
                 View.Filter = BookingFilter;
                 CollectionViewSource.GetDefaultView(lvBookingList.ItemsSource).Refresh();
             }
@@ -163,15 +163,15 @@ namespace Labb
         }
 
         private void ClearInputPanel()
-        { 
-            comboTime.SelectedIndex = -1; 
+        {
+            comboTime.SelectedIndex = -1;
             comboTable.SelectedIndex = -1;
             datePicker.SelectedDate = DateTime.Now;
             tbName.Clear();
             comboGuests.SelectedIndex = -1;
         }
 
-        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        private async void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             if (MyBookingSystem.Reservations == null || lvBookingList.SelectedIndex == -1)
                 MessageBox.Show("Markera en bokning för att redigera den.", "Fel!", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -187,18 +187,14 @@ namespace Labb
                     if (result == true)
                     {
                         dlg.DateChanged -= dlg_DateChanged;
-                        string? newDate = dlg.NewDate.Value.ToString("ddd d MMM");
+                        string newDate = dlg.NewDate.Value.ToString("ddd d MMM");
                         myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table));
-                        //dlg.datePickerEdit.SelectedDateChanged -= dlg.datePickerEdit_SelectedDateChanged;
-                        //dlg.comboTableEdit.SelectionChanged -= dlg.comboTimeEdit_SelectionChanged;
-                        dlg.comboGuestsEdit.SelectionChanged -= dlg.comboGuestsEdit_SelectionChanged;
-                        
+                        await myBookingSystem.SaveReservations();
                     }
                     else
                     {
                         dlg.DateChanged -= dlg_DateChanged;
                         myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, tmpReservation);
-                        
                     }
                 }
                 catch (Exception ex)
@@ -211,19 +207,19 @@ namespace Labb
 
         private void lvBookingList_GotFocus(object sender, RoutedEventArgs e)
         {
-            EnableEditButton();   
+            EnableEditButton();
         }
 
         private void dlg_DateChanged(object sender, EventArgs e)
         {
             var dlg = (EditDialog)sender;
-            string? newDate = dlg.NewDate.Value.ToString("ddd d MMM");
+            string newDate = dlg.NewDate.Value.ToString("ddd d MMM");
 
             Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
 
             if (myBookingSystem.IsDoubleBooking(editedReservation))
                 MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
-            
+
         }
 
         private async void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -243,23 +239,17 @@ namespace Labb
             if (datePicker.SelectedDate == null && comboTime.SelectedItem == null && comboTable.SelectedItem == null)
                 return true;
             else if (comboTime.SelectedItem == null && comboTable.SelectedItem == null)
-                return ((item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("ddd d MMM")));
-            //    return ((item as Reservation).Date.IndexOf(datePicker.SelectedDate.Value.ToString("ddd d MMM"), StringComparison.OrdinalIgnoreCase) >= 0);
+                return (item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("ddd d MMM"));
             else
-                return ((item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("ddd d MMM")))
-                    && ((item as Reservation).Time.Equals(comboTime.SelectedItem));
-            //    return ((item as Reservation).Date.IndexOf(datePicker.SelectedDate.Value.ToString("ddd d MMM"), StringComparison.OrdinalIgnoreCase) >= 0)
-            //        && ((item as Reservation).Time.IndexOf(comboTime.Text, StringComparison.OrdinalIgnoreCase)+1 >= 0);
-        }      
-
-
+                return (item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("ddd d MMM"))
+                    && (item as Reservation).Time.Equals(comboTime.SelectedItem);
+        }
 
         private void datePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             EnableBookButton(sender, e);
 
             RefreshContent();
-            
         }
 
         private void btnShowAll_Click(object sender, RoutedEventArgs e)

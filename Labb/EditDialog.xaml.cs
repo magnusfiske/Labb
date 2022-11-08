@@ -30,13 +30,13 @@ namespace Labb
 
             this.bookingList = bookingList;
             bookingPanelEdit.DataContext = this.bookingList;
-            //this.Index = this.bookingList.SelectedIndex;
             SetInDate();
         }
 
-        //private bool IsDateFocused { get; set; }
 
-        //public int Index { get; set; }
+        public event EventHandler DateChanged;
+
+
         public DateTime? NewDate { get; set; }
 
         public string guestName { get; set; }
@@ -45,8 +45,14 @@ namespace Labb
 
         public string Table { get; set; }
 
-        public int Guests { get; set; }
+        public string Guests { get; set; }
 
+
+        private void OnDateChanged(EventArgs e)
+        {
+            var dateChanged = this.DateChanged;
+            dateChanged?.Invoke(this, e);
+        }
 
         private void SetInDate()
         {
@@ -66,14 +72,6 @@ namespace Labb
             OnDateChanged(e);
         }
 
-        public event EventHandler DateChanged;
-
-        private void OnDateChanged(EventArgs e)
-        {
-            var dateChanged = this.DateChanged;
-            dateChanged?.Invoke(this, e);
-        }
-
         private void tbNameEdit_TextChanged(object sender, TextChangedEventArgs e)
         {
             guestName = tbNameEdit.Text;
@@ -88,11 +86,8 @@ namespace Labb
 
         public void comboGuestsEdit_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int guests;
-            if (Int32.TryParse(comboGuestsEdit.Text, out guests))
-                Guests = guests;
-            else
-                MessageBox.Show("Felaktig inmatning, försök igen.", "Felaktig inmatning!", MessageBoxButton.OK, MessageBoxImage.Error);
+            int i3 = comboGuestsEdit.SelectedIndex;    
+            Guests = $"{i3 + 1}";
         }
 
         private void comboTableEdit_SelectionChanged(object sender, SelectionChangedEventArgs e)

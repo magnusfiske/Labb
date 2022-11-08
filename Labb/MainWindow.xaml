@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Labb"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Boka bord" Height="450" Width="800">
     <Grid x:Name="BookingView">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -68,7 +68,7 @@
                     <GridViewColumn Header="Datum" Width="100" DisplayMemberBinding="{Binding Path=Date}"/>
                     <GridViewColumn Header="Tid" Width="50" DisplayMemberBinding="{Binding Path=Time}"/>
                     <GridViewColumn Header="Namn" Width="100" DisplayMemberBinding="{Binding Path=Name}"/>
-                    <GridViewColumn Header="Antal" Width="50" DisplayMemberBinding="{Binding Path=People}"/>
+                    <GridViewColumn Header="Antal" Width="50" DisplayMemberBinding="{Binding Path=Guests}"/>
                     <GridViewColumn Header="Bord" Width="75" DisplayMemberBinding="{Binding Path=Table}"/>
                 </GridView>
             </ListView.View>

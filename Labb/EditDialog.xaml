@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Labb"
         mc:Ignorable="d"
-        Title="Ändra bokning" Height="250" Width="400" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+        Title="Ändra bokning" Height="280" Width="400" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
     <Grid>
         <WrapPanel x:Name="bookingPanelEdit" Background="LightGray" Margin="10">
             <StackPanel Margin="10">
@@ -31,7 +31,7 @@
             </StackPanel>
             <StackPanel Margin="10">
                 <Label x:Name="labelGuestsEdit" Content="Antal gäster"/>
-                <ComboBox x:Name="comboGuestsEdit" MinWidth="150" Text="{Binding Path=SelectedItem.People}" SelectionChanged="comboGuestsEdit_SelectionChanged">
+                <ComboBox x:Name="comboGuestsEdit" MinWidth="150" Text="{Binding Path=SelectedItem.Guests}" SelectionChanged="comboGuestsEdit_SelectionChanged">
                     <ComboBoxItem Content="1"/>
                     <ComboBoxItem Content="2"/>
                     <ComboBoxItem Content="3"/>

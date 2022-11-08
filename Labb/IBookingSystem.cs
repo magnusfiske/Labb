@@ -12,7 +12,6 @@ namespace Labb
         List<IReservation> Reservations { get; set; }
 
         void BookTable(IReservation r);
-        void ListBookings();
-        void CancelReservation();
+        void CancelReservation(int index);
     }
 }

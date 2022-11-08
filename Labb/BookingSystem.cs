@@ -15,8 +15,6 @@ namespace Labb
         public BookingSystem()
         {
             Reservations = new List<IReservation>();
-            //Reservations.Add(new Reservation("Magnus", 4, DateTime.Parse("2022-11-05"), "19:00", "3"));
-            //Reservations.Add(new Reservation("Ellen Fiske", 2, DateTime.Parse("2022-11-05"), "20:00", "4"));
         }
 
         public List<IReservation> Reservations { get; set; }
@@ -25,34 +23,31 @@ namespace Labb
 
         public void BookTable(IReservation reservation)
         {
-
-            //if (IsDoubleBooking(reservation))
-            //    MessageBox.Show($"{reservation.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //else
                 Reservations.Add(reservation);
         }
 
-        public void CancelReservation()
+        public async void CancelReservation(int index)
         {
-
-        }
-
-        public void ListBookings()
-        {
-
+            try
+            {
+                Reservations.RemoveAt(index);
+                await SaveReservations();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public bool IsDoubleBooking(IReservation reservation)
         {
             return Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList().Any(item => item.Table.Equals(reservation.Table)); 
         }
-        public bool IsDoubleBooking(IReservation reservation, int index)
+
+        public bool HasFive(IReservation reservation)
         {
-            Reservations.RemoveAt(index);
-            bool result = Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList().Any(item => item.Table.Equals(reservation.Table)); 
-            if (result == false)
-                Reservations.Insert(index, reservation);
-            return result;
+            var number = Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList();
+            return number.Count >= 5 ? true : false;
         }
 
         public async Task LoadReservations()
@@ -81,6 +76,7 @@ namespace Labb
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Fel:\n{ex}", "Något gick fel!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        FileName = null;
                     }
                 }
             }

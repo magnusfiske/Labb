@@ -7,18 +7,18 @@ using System.ComponentModel;
 
 namespace Labb
 {
-    public class Reservation : INotifyPropertyChanged, IReservation
+    public class Reservation :  IReservation
     {
-        private string? name;
-        private int people;
+        private string name;
+        private string guests;
         private string date;
-        private string? table;
-        private string? time;
+        private string table;
+        private string time;
 
-        public Reservation(string name, int people, string date, string time, string table)
+        public Reservation(string name, string guests, string date, string time, string table)
         {
             Name = name;
-            People = people;
+            Guests = guests;
             Date = date;
             Time = time;
             Table = table;
@@ -27,57 +27,28 @@ namespace Labb
         public string Name
         {
             get { return name; }
-            set
-            {
-                name = value;
-                //OnPropertyChanged("Name");
-            }
+            set { name = value; }
         }
-        public int People
+        public string Guests
         {
-            get { return people; }
-            set
-            {
-                people = value;
-                //OnPropertyChanged("People");
-            }
+            get { return guests; }
+            set { guests = value; }
         }
         public string Date
         {
             get { return date; }
-            set
-            {
-                date = value;
-               // OnPropertyChanged("Date");
-            }
+            set { date = value; }
         }
         public string Time
         {
             get { return time; }
-            set
-            {
-                time = value;
-                //OnPropertyChanged("Time");
-            }
+            set { time = value; }
         }
         public string Table
         {
             get { return table; }
-            set
-            {
-                table = value;
-                //OnPropertyChanged("Table");
-            }
+            set { table = value; }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

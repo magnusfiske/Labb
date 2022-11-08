@@ -9,7 +9,7 @@ namespace Labb
     public interface IReservation
     {
         string Name { get; set; }
-        int People { get; set; }
+        string Guests { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string Table { get; set; }

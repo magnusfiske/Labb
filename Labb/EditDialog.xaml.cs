@@ -39,7 +39,7 @@ namespace Labb
         //public int Index { get; set; }
         public DateTime? NewDate { get; set; }
 
-        public string Name { get; set; }
+        public string guestName { get; set; }
 
         public string Time { get; set; }
 
@@ -76,7 +76,7 @@ namespace Labb
 
         private void tbNameEdit_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Name = tbNameEdit.Text;
+            guestName = tbNameEdit.Text;
         }
 
         public void comboTimeEdit_SelectionChanged(object sender, SelectionChangedEventArgs e)

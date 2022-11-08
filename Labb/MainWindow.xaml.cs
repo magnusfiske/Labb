@@ -71,7 +71,8 @@ namespace Labb
             string name = tbName.Text;
             string time = comboTime.Text;
             string table = comboTable.Text;
-            int people = Int32.Parse(comboGuests.Text); //Fixa till TryParse
+            int people = 
+                Int32.Parse(comboGuests.Text); //Fixa till TryParse
 
             try
             {
@@ -187,9 +188,9 @@ namespace Labb
                     {
                         dlg.DateChanged -= dlg_DateChanged;
                         string? newDate = dlg.NewDate.Value.ToString("ddd d MMM");
-                        myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, new Reservation(dlg.Name, dlg.Guests, newDate, dlg.Time, dlg.Table));
-                        dlg.datePickerEdit.SelectedDateChanged -= dlg.datePickerEdit_SelectedDateChanged;
-                        dlg.comboTableEdit.SelectionChanged -= dlg.comboTimeEdit_SelectionChanged;
+                        myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table));
+                        //dlg.datePickerEdit.SelectedDateChanged -= dlg.datePickerEdit_SelectedDateChanged;
+                        //dlg.comboTableEdit.SelectionChanged -= dlg.comboTimeEdit_SelectionChanged;
                         dlg.comboGuestsEdit.SelectionChanged -= dlg.comboGuestsEdit_SelectionChanged;
                         
                     }
@@ -218,7 +219,7 @@ namespace Labb
             var dlg = (EditDialog)sender;
             string? newDate = dlg.NewDate.Value.ToString("ddd d MMM");
 
-            Reservation editedReservation = new Reservation(dlg.Name, dlg.Guests, newDate, dlg.Time, dlg.Table);
+            Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
 
             if (myBookingSystem.IsDoubleBooking(editedReservation))
                 MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);

@@ -30,12 +30,14 @@ namespace Labb
 
             this.bookingList = bookingList;
             bookingPanelEdit.DataContext = this.bookingList;
-            SetInDate();
+            
+            SetIndateAndId();
         }
 
 
         public event EventHandler DateChanged;
 
+        public Guid ReservationId { get; set; }
 
         public DateTime? NewDate { get; set; }
 
@@ -54,10 +56,14 @@ namespace Labb
             dateChanged?.Invoke(this, e);
         }
 
-        private void SetInDate()
+
+
+        private void SetIndateAndId()
         {
             Reservation? tmp = bookingList.SelectedItem as Reservation;
             datePickerEdit.SelectedDate = DateTime.Parse(tmp.Date);
+            ReservationId = tmp.ReservationId;
+            Table = tmp.Table;
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)

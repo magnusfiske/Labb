@@ -58,10 +58,10 @@
             </StackPanel>
             <Button x:Name="btnBook" Content="Boka" IsEnabled="False" Click="btnBook_Click" Margin="10" MinWidth="150" Height="30" VerticalAlignment="Bottom"/>
         </WrapPanel>
-        <Button x:Name="btnCancel" Content="Avboka" Click="btnCancel_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False"/>
-        <Button x:Name="btnEdit" Content="Redigera" Click="btnEdit_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False"/>
-        <Button x:Name="btnLoad" Content="Öppna" Click="btnLoad_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Bottom"/>
-        <Button x:Name="btnShowAll" Content="Visa alla" Click="btnShowAll_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Bottom"/>
+        <Button x:Name="btnCancel" Content="Avboka" Click="btnCancel_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False" ToolTip="Ta bort en bokning permanent"/>
+        <Button x:Name="btnEdit" Content="Redigera..." Click="btnEdit_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Top" IsEnabled="False" ToolTip="Välj en bokning i listan för att redigera den"/>
+        <Button x:Name="btnLoad" Content="Öppna" Click="btnLoad_Click" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10" Width="150" Grid.Row="3" VerticalAlignment="Bottom" ToolTip="Ladda bokningslista från fil"/>
+        <Button x:Name="btnShowAll" Content="Visa alla" Click="btnShowAll_Click" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Width="150" Height="20" Grid.Row="3" VerticalAlignment="Bottom" ToolTip="Visa hela listan eller filtrera utifrån valt datum och tid"/>
         <ListView x:Name="lvBookingList" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" Margin="10" FontSize="10" GotFocus="lvBookingList_GotFocus">
             <ListView.View>
                 <GridView>
@@ -88,6 +88,11 @@
                     <GridViewColumn Width="75" DisplayMemberBinding="{Binding Path=Table}">
                         <GridViewColumn.Header>
                             <GridViewColumnHeader Tag="Table" Click="lvBookingListColumnHeader_Click">Bord</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="75" DisplayMemberBinding="{Binding Path=ReservationId}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="ReservationId" Click="lvBookingListColumnHeader_Click">Id</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                 </GridView>

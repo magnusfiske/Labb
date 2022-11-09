@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,11 +27,11 @@ namespace Labb
                 Reservations.Add(reservation);
         }
 
-        public async void CancelReservation(int index)
+        public async void CancelReservation(Reservation reservation)
         {
             try
             {
-                Reservations.RemoveAt(index);
+                Reservations.Remove(reservation);
                 await SaveReservations();
             }
             catch (Exception ex)
@@ -39,15 +40,24 @@ namespace Labb
             }
         }
 
-        public bool IsDoubleBooking(IReservation reservation)
-        {
-            return Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList().Any(item => item.Table.Equals(reservation.Table)); 
+        
+        public bool IsDoubleBooking(Reservation reservation)
+        { 
+                
+            return Reservations.Where(item => !item.ReservationId.Equals(reservation.ReservationId))
+                .Where(item => item.Date.Equals(reservation.Date)).ToList()
+                .Where(item => item.Time.Equals(reservation.Time)).ToList()
+                .Any(item => item.Table.Equals(reservation.Table));
         }
 
-        public bool HasFive(IReservation reservation)
+        
+
+        public bool HasFive(Reservation reservation)
         {
-            var number = Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList().Where(item => item.Time.Equals(reservation.Time)).ToList();
-            return number.Count >= 5 ? true : false;
+            var number = Reservations.Where(item => item.Date.Equals(reservation.Date)).ToList()
+                    .Where(item => item.Time.Equals(reservation.Time)).ToList();
+
+            return (Reservations.Any(item => item.ReservationId.Equals(reservation.ReservationId))) ? number.Count >= 6 : number.Count >= 5;
         }
 
         public async Task LoadReservations()
@@ -145,6 +155,59 @@ namespace Labb
                 }
             }
 
+        }
+
+        public void SortReservations(string sortBy, bool newDir)
+        {
+            switch (newDir)
+            {
+                case true:
+                    switch (sortBy)
+                    {
+                        case "Date":
+                            Reservations = Reservations.OrderBy(item => item.Date).ToList();
+                            break;
+                        case "Time":
+                            Reservations = Reservations.OrderBy(item => item.Time).ToList();
+                            break;
+                        case "Name":
+                            Reservations = Reservations.OrderBy(item => item.Name).ToList();
+                            break;
+                        case "Guests":
+                            Reservations = Reservations.OrderBy(item => item.Guests).ToList();
+                            break;
+                        case "Table":
+                            Reservations = Reservations.OrderBy(item => item.Table).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case false:
+                    switch (sortBy)
+                    {
+                        case "Date":
+                            Reservations = Reservations.OrderByDescending(item => item.Date).ToList();
+                            break;
+                        case "Time":
+                            Reservations = Reservations.OrderByDescending(item => item.Time).ToList();
+                            break;
+                        case "Name":
+                            Reservations = Reservations.OrderByDescending(item => item.Name).ToList();
+                            break;
+                        case "Guests":
+                            Reservations = Reservations.OrderByDescending(item => item.Guests).ToList();
+                            break;
+                        case "Table":
+                            Reservations = Reservations.OrderByDescending(item => item.Table).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
     }

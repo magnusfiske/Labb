@@ -8,6 +8,7 @@ namespace Labb
 {
     public interface IReservation
     {
+        Guid ReservationId { get; set; }
         string Name { get; set; }
         string Guests { get; set; }
         string Date { get; set; }

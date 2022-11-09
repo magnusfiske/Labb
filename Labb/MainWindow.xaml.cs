@@ -27,6 +27,7 @@ namespace Labb
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// 
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -41,7 +42,7 @@ namespace Labb
         public MainWindow()
         {
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
-            ci.DateTimeFormat.ShortDatePattern = "ddd d MMM";
+            ci.DateTimeFormat.ShortDatePattern = "dd MMM ddd";
             Thread.CurrentThread.CurrentCulture = ci;
 
             InitializeComponent();
@@ -71,7 +72,7 @@ namespace Labb
 
         private async void btnBook_Click(object sender, RoutedEventArgs e)
         {
-            string date = datePicker.SelectedDate.Value.ToString("ddd d MMM", CultureInfo.CurrentCulture);
+            string date = datePicker.SelectedDate.Value.ToString("dd MMM ddd", CultureInfo.CurrentCulture);
             string name = tbName.Text;
             string time = comboTime.Text;
             string table = comboTable.Text;
@@ -81,14 +82,14 @@ namespace Labb
             {
                 Reservation reservation = new Reservation(name, guests, date, time, table);
 
-                if (myBookingSystem.IsDoubleBooking(reservation))
+                if (MyBookingSystem.IsDoubleBooking(reservation))
                     MessageBox.Show($"{reservation.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                else if (myBookingSystem.HasFive(reservation))
+                else if (MyBookingSystem.HasFive(reservation))
                     MessageBox.Show($"Det finns redan 5 bord bokade kl {reservation.Time}. Prova med en annan tid eller be gästen komma obokad.", "För många bokningar", MessageBoxButton.OK, MessageBoxImage.Warning);
                 else
                 {
                     MyBookingSystem.BookTable(reservation);
-                    await myBookingSystem.SaveReservations();
+                    await MyBookingSystem.SaveReservations();
                     RefreshContent();
                     ClearInputPanel();
                 }
@@ -111,7 +112,8 @@ namespace Labb
             {
                 try
                 {
-                    myBookingSystem.CancelReservation(lvBookingList.SelectedIndex);
+                    Reservation bookingToCancel = lvBookingList.SelectedItem as Reservation;
+                    MyBookingSystem.CancelReservation(bookingToCancel);
                     RefreshContent();
                 }
                 catch (Exception ex)
@@ -123,13 +125,17 @@ namespace Labb
 
         private void RefreshContent()
         {
+            //MyBookingSystem.Reservations = MyBookingSystem.Reservations.OrderBy(item => item.Date).ThenBy(item => item.Time).ToList();
             lvBookingList.ItemsSource = null;
-            lvBookingList.ItemsSource = myBookingSystem.Reservations;
+            lvBookingList.ItemsSource = MyBookingSystem.Reservations;
+            
 
             if (Filter == true)
             {
-                View.Filter = BookingFilter;
-                CollectionViewSource.GetDefaultView(lvBookingList.ItemsSource).Refresh();
+                var view = CollectionViewSource.GetDefaultView(lvBookingList.ItemsSource);
+                view.Filter = BookingFilter;
+                //apa.Refresh();
+                //CollectionViewSource.GetDefaultView(lvBookingList.ItemsSource).Refresh();
             }
             else
             {
@@ -175,6 +181,40 @@ namespace Labb
             comboGuests.SelectedIndex = -1;
         }
 
+        //private async void btnEdit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (MyBookingSystem.Reservations == null || lvBookingList.SelectedIndex == -1)
+        //        MessageBox.Show("Markera en bokning för att redigera den.", "Fel!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    else
+        //    {
+        //        try
+        //        {
+        //            Reservation tmpReservation = MyBookingSystem.Reservations.Select(item => item.ReservationId.Equals(lvBookingList.SelectedItem)) as Reservation;
+        //            //Reservation tmpReservation = MyBookingSystem.Reservations.ElementAt(lvBookingList.SelectedIndex) as Reservation;
+        //            var dlg = new EditDialog(lvBookingList) { Owner = this };
+        //            MyBookingSystem.Reservations.RemoveAt(lvBookingList.SelectedIndex);
+        //            dlg.DateChanged += dlg_DateChanged;
+        //            Nullable<bool> result = dlg.ShowDialog();
+        //            if (result == true)
+        //            {
+        //                dlg.DateChanged -= dlg_DateChanged;
+        //                string newDate = dlg.NewDate.Value.ToString("dd MMM ddd");
+        //                MyBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table));
+        //                await MyBookingSystem.SaveReservations();
+        //            }
+        //            else
+        //            {
+        //                dlg.DateChanged -= dlg_DateChanged;
+        //                MyBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, tmpReservation);
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(ex.Message);
+        //        }
+        //    }
+        //    RefreshContent();
+        //}
         private async void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             if (MyBookingSystem.Reservations == null || lvBookingList.SelectedIndex == -1)
@@ -183,22 +223,21 @@ namespace Labb
             {
                 try
                 {
-                    Reservation tmpReservation = MyBookingSystem.Reservations.ElementAt(lvBookingList.SelectedIndex) as Reservation;
                     var dlg = new EditDialog(lvBookingList) { Owner = this };
-                    MyBookingSystem.Reservations.RemoveAt(lvBookingList.SelectedIndex);
                     dlg.DateChanged += dlg_DateChanged;
                     Nullable<bool> result = dlg.ShowDialog();
                     if (result == true)
                     {
                         dlg.DateChanged -= dlg_DateChanged;
-                        string newDate = dlg.NewDate.Value.ToString("ddd d MMM");
-                        myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table));
-                        await myBookingSystem.SaveReservations();
+                        string newDate = dlg.NewDate.Value.ToString("dd MMM ddd");
+                        var bookingToUpdate = MyBookingSystem.Reservations.FirstOrDefault(item => item.ReservationId.Equals(dlg.ReservationId));
+                        bookingToUpdate.Date = newDate;
+                        await MyBookingSystem.SaveReservations();
                     }
                     else
                     {
                         dlg.DateChanged -= dlg_DateChanged;
-                        myBookingSystem.Reservations.Insert(lvBookingList.SelectedIndex, tmpReservation);
+                       
                     }
                 }
                 catch (Exception ex)
@@ -209,32 +248,74 @@ namespace Labb
             RefreshContent();
         }
 
-        private void lvBookingList_GotFocus(object sender, RoutedEventArgs e)
-        {
-            EnableEditButton();
-        }
-
         private void dlg_DateChanged(object sender, EventArgs e)
         {
             try
             {
                 var dlg = (EditDialog)sender;
-                string newDate = dlg.NewDate.Value.ToString("ddd d MMM");
+                string newDate = dlg.NewDate.Value.ToString("dd MMM ddd");
 
-                Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
+                Reservation bookingToUpdate = MyBookingSystem.Reservations.FirstOrDefault(item => item.ReservationId.Equals(dlg.ReservationId)) as Reservation;
+                bookingToUpdate.Date = newDate;
+                bookingToUpdate.Time = dlg.Time;
+                bookingToUpdate.Table = dlg.Table;
 
-                if (myBookingSystem.IsDoubleBooking(editedReservation))
+                //Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
+
+                if (MyBookingSystem.IsDoubleBooking(bookingToUpdate))
+                {
+                    dlg.btnOk.IsEnabled = false;
                     MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else if (MyBookingSystem.HasFive(bookingToUpdate))
+                {
+                    dlg.btnOk.IsEnabled = false;
+                    MessageBox.Show($"Det finns redan 5 bord bokade kl {dlg.Time}. Prova med en annan tid eller be gästen komma obokad.", "För många bokningar", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                    dlg.btnOk.IsEnabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Något gick fel!");
             }
         }
+        private void lvBookingList_GotFocus(object sender, RoutedEventArgs e)
+        {
+            EnableEditButton();
+        }
+
+        //private void dlg_DateChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        var dlg = (EditDialog)sender;
+        //        string newDate = dlg.NewDate.Value.ToString("dd MMM ddd");
+
+        //        Reservation editedReservation = new Reservation(dlg.guestName, dlg.Guests, newDate, dlg.Time, dlg.Table);
+
+        //        if (MyBookingSystem.IsDoubleBooking(editedReservation))
+        //        {
+        //            dlg.btnOk.IsEnabled = false;
+        //            MessageBox.Show($"{dlg.Table} är redan bokat den valda tiden. Prova med ett annat bord.", "Dubbelbokning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        }
+        //        else if (MyBookingSystem.HasFive(editedReservation))
+        //        {
+        //            dlg.btnOk.IsEnabled = false;
+        //            MessageBox.Show($"Det finns redan 5 bord bokade kl {dlg.Time}. Prova med en annan tid eller be gästen komma obokad.", "För många bokningar", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        }
+        //        else
+        //            dlg.btnOk.IsEnabled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "Något gick fel!");
+        //    }
+        //}
 
         private async void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            await myBookingSystem.LoadReservations();
+            await MyBookingSystem.LoadReservations();
             RefreshContent();
         }
 
@@ -249,9 +330,9 @@ namespace Labb
             if (datePicker.SelectedDate == null && comboTime.SelectedItem == null && comboTable.SelectedItem == null)
                 return true;
             else if (comboTime.SelectedItem == null && comboTable.SelectedItem == null)
-                return (item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("ddd d MMM"));
+                return (item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("dd MMM ddd"));
             else
-                return (item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("ddd d MMM"))
+                return (item as Reservation).Date.Equals(datePicker.SelectedDate.Value.ToString("dd MMM ddd"))
                     && (item as Reservation).Time.Equals(comboTime.SelectedItem);
         }
 
@@ -282,20 +363,24 @@ namespace Labb
         {
             GridViewColumnHeader column = sender as GridViewColumnHeader;
             string sortBy = column.Tag.ToString();
-            if(listViewSortCol != null)
+            if (listViewSortCol != null)
             {
                 AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
                 lvBookingList.Items.SortDescriptions.Clear();
             }
 
-            ListSortDirection newDir = ListSortDirection.Ascending;
-            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
-                newDir = ListSortDirection.Descending;
+            //ListSortDirection newDir = ListSortDirection.Ascending;
+            bool newDir = true;
+            if (listViewSortCol == column && listViewSortAdorner.Direction == ListSortDirection.Ascending)
+                newDir = false;
 
             listViewSortCol = column;
             listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
             AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
-            lvBookingList.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+            MyBookingSystem.SortReservations(sortBy, newDir);
+
+            RefreshContent();
+            //lvBookingList.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
     }
 }

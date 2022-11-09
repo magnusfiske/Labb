@@ -39,6 +39,7 @@
                     <ComboBoxItem Content="5"/>
                     <ComboBoxItem Content="6"/>
                     <ComboBoxItem Content="7"/>
+                    <ComboBoxItem Content="8"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Margin="10">
@@ -54,7 +55,7 @@
                     <ComboBoxItem Content="bord 8"/>
                 </ComboBox>
             </StackPanel>
-            <Button x:Name="btnOk" Content="OK" Click="btnOk_Click" Height="20" Width="100" Margin="35"/>
+            <Button x:Name="btnOk" Content="OK" Click="btnOk_Click" Height="20" Width="100" Margin="35" IsEnabled="True"/>
         </WrapPanel>
         
     </Grid>

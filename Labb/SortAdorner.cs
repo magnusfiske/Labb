@@ -19,9 +19,18 @@ namespace Labb
 
         private static Geometry descGeometry = Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
 
-        public SortAdorner(UIElement adornedElement, ListSortDirection dir) : base(adornedElement)
+        public SortAdorner(UIElement adornedElement, /*ListSortDirection*/bool dir) : base(adornedElement)
         {
-            this.Direction = dir;
+            switch (dir)
+            {
+                case true:
+                    this.Direction = ListSortDirection.Ascending;
+                    break;
+                case false:
+                    this.Direction = ListSortDirection.Descending;
+                    break;
+            }
+            //this.Direction = dir;
         }
 
         public ListSortDirection Direction { get; private set; }

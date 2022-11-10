@@ -39,7 +39,6 @@ namespace Labb
                 MessageBox.Show(ex.Message);
             }
         }
-
         
         public bool IsDoubleBooking(Reservation reservation)
         { 
@@ -49,8 +48,6 @@ namespace Labb
                 .Where(item => item.Time.Equals(reservation.Time)).ToList()
                 .Any(item => item.Table.Equals(reservation.Table));
         }
-
-        
 
         public bool HasFive(Reservation reservation)
         {
@@ -106,9 +103,6 @@ namespace Labb
                     MessageBox.Show($"Fel:\n{ex}", "Något gick fel!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
-
-
         }
 
         public async Task SaveReservations()
@@ -153,60 +147,6 @@ namespace Labb
                 {
                     MessageBox.Show($"Fel:\n{ex}", "Något gick fel!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-
-        }
-
-        public void SortReservations(string sortBy, bool newDir)
-        {
-            switch (newDir)
-            {
-                case true:
-                    switch (sortBy)
-                    {
-                        case "Date":
-                            Reservations = Reservations.OrderBy(item => item.Date).ToList();
-                            break;
-                        case "Time":
-                            Reservations = Reservations.OrderBy(item => item.Time).ToList();
-                            break;
-                        case "Name":
-                            Reservations = Reservations.OrderBy(item => item.Name).ToList();
-                            break;
-                        case "Guests":
-                            Reservations = Reservations.OrderBy(item => item.Guests).ToList();
-                            break;
-                        case "Table":
-                            Reservations = Reservations.OrderBy(item => item.Table).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case false:
-                    switch (sortBy)
-                    {
-                        case "Date":
-                            Reservations = Reservations.OrderByDescending(item => item.Date).ToList();
-                            break;
-                        case "Time":
-                            Reservations = Reservations.OrderByDescending(item => item.Time).ToList();
-                            break;
-                        case "Name":
-                            Reservations = Reservations.OrderByDescending(item => item.Name).ToList();
-                            break;
-                        case "Guests":
-                            Reservations = Reservations.OrderByDescending(item => item.Guests).ToList();
-                            break;
-                        case "Table":
-                            Reservations = Reservations.OrderByDescending(item => item.Table).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
             }
         }
 

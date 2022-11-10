@@ -16,6 +16,12 @@ namespace Labb
         public BookingSystem()
         {
             Reservations = new List<IReservation>();
+
+            using FileStream openStream = File.OpenRead(@"Bokningar.json");
+            List<Reservation>? getReservationList =
+            JsonSerializer.Deserialize<List<Reservation>>(openStream);
+            Reservations.Clear();
+            Reservations.AddRange(getReservationList);
         }
 
         public List<IReservation> Reservations { get; set; }
